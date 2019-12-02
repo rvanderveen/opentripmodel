@@ -240,7 +240,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
         # Compatibility with older versions, where index.html did not contain a placeholder for version selection.
         if version in ['4.0.0-b1', '4.0.0', '4.0.1', '4.1.0', '4.1.1', '4.1.2']:
-            tag = tags.get('4.2.0-b1')
+            tag = tags.get('4.2.0-b5')
             sha = tag['commit']['sha']
 
         contents_bytes = self.handle_file_request(sha, 'redoc/index.html', version, local_file)
@@ -258,7 +258,7 @@ class MyHandler(BaseHTTPRequestHandler):
         result = versions_cache.get("versions")
         if not result:
             log.debug("Getting versions from Github")
-            result = requests.get("https://api.github.com/repos/opentripmodel/opentripmodel/tags",
+            result = requests.get("https://api.github.com/repos/rvanderveen/opentripmodel/tags",
                                   headers={'Authorization': self.GITHUB_TOKEN_STRING})
             versions_cache.setdefault("versions", result)
         return result
@@ -270,7 +270,7 @@ class MyHandler(BaseHTTPRequestHandler):
         if not result:
             log.debug("Getting file from github: {}/{}".format(sha, file))
             result = requests.get(
-                "https://raw.githubusercontent.com/opentripmodel/opentripmodel/{}/{}".format(sha, file))
+                "https://raw.githubusercontent.com/rvanderveen/opentripmodel/{}/{}".format(sha, file))
             if result.status_code in (200, 201):
                 files_cache.setdefault(cachekey, result)
             metrics.github_resource(file=file, version=version, from_cache=True, status_code=result.status_code)
